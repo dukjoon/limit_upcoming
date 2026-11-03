@@ -4,27 +4,31 @@
 
 ### **Deterministic Local Evidence Bundles & Proactive Usage Limit Handoff for AI Coding Agents**
 
+<p align="center">
+  <b>English</b> • <a href="README.ko.md">한국어</a>
+</p>
+
 [![Python Version](https://img.shields.io/badge/python-3.9+-3776AB.svg?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-[![Token Overhead: 0-Token](https://img.shields.io/badge/overhead-0--token%20local-00C853.svg?style=flat-square)](#-how-0-token-passive-probing-works)
-[![Local Deterministic](https://img.shields.io/badge/determinism-local%20evidence-blueviolet.svg?style=flat-square)](#-local-evidence-guarantees)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/your-username/limit-upcoming/pulls)
+[![Token Overhead: 0-Token](https://img.shields.io/badge/overhead-0--token%20local-00C853.svg?style=flat-square)](#how-it-works)
+[![Local Deterministic](https://img.shields.io/badge/determinism-local%20evidence-blueviolet.svg?style=flat-square)](#honest-boundaries)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/dukjoon/limit_upcoming/pulls)
 
 <p align="center">
-  <a href="#-the-problem">The Problem</a> •
-  <a href="#-key-features">Key Features</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-how-0-token-probing-works">How It Works</a> •
-  <a href="#-architecture--workflow">Architecture</a> •
-  <a href="#-cli-reference">CLI Reference</a> •
-  <a href="#-technical-specification--boundaries">Honest Boundaries</a>
+  <a href="#the-problem">The Problem</a> •
+  <a href="#key-features">Key Features</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#how-it-works">How It Works</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="#cli-reference">CLI Reference</a> •
+  <a href="#honest-boundaries">Honest Boundaries</a>
 </p>
 
 </div>
 
 ---
 
-## 💥 The Problem: The "429 Mid-Refactor Disaster"
+## 💥 The Problem: The "429 Mid-Refactor Disaster" <a id="the-problem"></a>
 
 When an AI coding agent hits an API quota exhaustion (`HTTP 429` or subscription window reset):
 1. **Broken Working Tree**: The agent gets cut off mid-edit (e.g., modified 2 files out of 5), leaving invalid syntax and broken builds.
@@ -35,7 +39,7 @@ When an AI coding agent hits an API quota exhaustion (`HTTP 429` or subscription
 
 ---
 
-## ✨ Key Features
+## ✨ Key Features <a id="key-features"></a>
 
 * 🛡️ **Zero-Token Passive Quota Sensing**: Reads local JSONL telemetry (Codex CLI) and local statusline pipes (Claude Code) out-of-band. Zero API calls, zero LLM prompt overhead.
 * 📦 **Complete Git Working Tree Preservation**:
@@ -50,15 +54,15 @@ When an AI coding agent hits an API quota exhaustion (`HTTP 429` or subscription
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start <a id="quick-start"></a>
 
 ### 1. Installation
 
 Zero external dependencies! Operates 100% on the Python 3 standard library.
 
 ```bash
-git clone https://github.com/your-username/limit-upcoming.git
-cd limit-upcoming
+git clone https://github.com/dukjoon/limit_upcoming.git
+cd limit_upcoming
 pip install -e .
 ```
 
@@ -99,7 +103,7 @@ limit-upcoming guard \
 
 ---
 
-## 🔍 How 0-Token Probing Works
+## 🔍 How 0-Token Probing Works <a id="how-it-works"></a>
 
 ```mermaid
 flowchart LR
@@ -127,7 +131,7 @@ flowchart LR
 
 ---
 
-## 🏗️ Architecture & Workflow
+## 🏗️ Architecture & Workflow <a id="architecture"></a>
 
 ```mermaid
 stateDiagram-v2
@@ -155,7 +159,7 @@ stateDiagram-v2
 
 ---
 
-## 📦 What's Inside a Generated Bundle?
+## 📦 What's Inside a Generated Bundle? <a id="whats-inside"></a>
 
 Every bundle produced at `.handoff/bundle-<timestamp>/` contains:
 
@@ -207,7 +211,7 @@ FAILED tests/test_auth.py::test_jwt_expiration - AssertionError: Token not expir
 
 ---
 
-## 🛠️ CLI Reference
+## 🛠️ CLI Reference <a id="cli-reference"></a>
 
 ```text
 usage: limit-upcoming [-h] {probe,bundle,guard,hook-statusline} ...
@@ -227,7 +231,7 @@ Subcommands:
 
 ---
 
-## ⚖️ Technical Specification & Boundaries
+## ⚖️ Technical Specification & Boundaries <a id="honest-boundaries"></a>
 
 We believe in **radical technical honesty**. Unlike vague claims of "autonomous 100% recovery", here is our exact operational contract:
 
@@ -248,7 +252,7 @@ We believe in **radical technical honesty**. Unlike vague claims of "autonomous 
 
 ---
 
-## 🧪 Benchmark & Verification Suite
+## 🧪 Benchmark & Verification Suite <a id="benchmark"></a>
 
 Run the full local test suite in sub-second time:
 
@@ -257,13 +261,13 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 # Ran 9 tests in 0.685s (OK)
 ```
 
-Detailed experimental protocols for multi-agent resumption benchmarking can be found in [docs/EXPERIMENT_PROTOCOL.md](file:///Users/ever/Desktop/starhub/limit_upcoming/docs/EXPERIMENT_PROTOCOL.md).
+Detailed experimental protocols for multi-agent resumption benchmarking can be found in [docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md).
 
 ---
 
-## 🤝 Contributing
+## 🤝 Contributing <a id="contributing"></a>
 
-Contributions are warmly welcomed! Please read our [docs/SPEC.md](file:///Users/ever/Desktop/starhub/limit_upcoming/docs/SPEC.md) before submitting PRs to ensure new features align with our local-first, zero-overhead philosophy.
+Contributions are warmly welcomed! Please read our [docs/SPEC.md](docs/SPEC.md) before submitting PRs to ensure new features align with our local-first, zero-overhead philosophy.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feat/awesome-probe`)
@@ -274,6 +278,6 @@ Contributions are warmly welcomed! Please read our [docs/SPEC.md](file:///Users/
 
 ---
 
-## 📄 License
+## 📄 License <a id="license"></a>
 
 Distributed under the **MIT License**. See `LICENSE` for details.
