@@ -24,6 +24,10 @@
   <a href="#honest-boundaries">Honest Boundaries</a>
 </p>
 
+<p align="center">
+  <img src="assets/usage-limit-error.svg" alt="AI Agent Usage Limit Reached (429 Error in CLI and Desktop App)" width="100%">
+</p>
+
 </div>
 
 ---

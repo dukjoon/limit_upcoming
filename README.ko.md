@@ -24,6 +24,10 @@
   <a href="#honest-boundaries">솔직한 기술 명세</a>
 </p>
 
+<p align="center">
+  <img src="assets/usage-limit-error.svg" alt="AI 코딩 에이전트 사용량 한도 초과 (CLI 및 데스크탑 앱 429 에러)" width="100%">
+</p>
+
 </div>
 
 ---
