@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "limit-upcoming"
+version = "0.1.0"
+description = "Deterministic local evidence bundle generator and proactive usage limit handoff tool"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+    { name = "Ever", email = "dev@example.com" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Utilities",
+]
+
+[project.scripts]
+limit-upcoming = "limit_upcoming.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
