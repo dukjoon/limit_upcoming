@@ -46,60 +46,57 @@ Codex CLI나 Claude Code 같은 AI 코딩 에이전트에 큰 리팩터링을 �
 
 ## ✨ 핵심 요약 <a id="key-features"></a>
 
-* 🛡️ **토큰 소모 제로(0-Token) 패시브 감지**: Codex CLI의 세션 JSONL 파일과 Claude Code의 상태라인 파이프를 백그라운드에서 가볍게 훑습니다. API 호출도, 프롬프트 토큰 낭비도 없습니다.
-* 📦 **새로 만든 파일까지 남김없이 캡처**:
-  * 흔히 쓰는 `git diff`는 추적 중인 수정본만 잡고 새로 만든 파일(Untracked)을 통째로 놓칩니다.
-  * `limit-upcoming`은 `git diff`(수정본)와 `git diff --cached`(스테이징)는 물론, **새로 추가된 파일 내용 전문까지 단일 문서(`HANDOFF_BUNDLE.md`)에 빠짐없이 담아냅니다.**
-  * `.env` 같은 비밀 키 파일이나 바이너리, 대용량 파일은 자동으로 걸러내고 `manifest.json`에 제외 사유를 정직하게 남깁니다.
-* 🚦 **단계별 세이프가드 (Adaptive Gating)**:
-  * `80% 미만 (SAFE)`: 아무런 간섭 없이 조용히 넘어갑니다.
-  * `88% ~ 92% (WARNING)`: 백그라운드에 임시 드래프트 번들(`.handoff/latest-draft/`)을 떠두고, 지금 손대고 있는 파일만 깔끔하게 마무리하도록 유도합니다.
-  * `93% 이상 (CRITICAL)`: 코드가 반쪽짜리로 깨지는 걸 막기 위해 **새 코드 수정을 즉시 멈추고(Freeze)**, 후속 에이전트에 넘길 최종 인계 번들을 만듭니다.
-* 🧪 **테스트 결과 가감 없이 기록**: `pytest`나 `npm test` 같은 검증 명령을 돌려보고 종료 코드, stdout, stderr, 실행 시간을 있는 그대로 번들에 첨부합니다.
+- 🛡️ **토큰 소모 제로(0-Token) 패시브 감지**: Codex CLI의 세션 JSONL 파일과 Claude Code의 상태라인 파이프를 백그라운드에서 가볍게 훑습니다. API 호출도, 프롬프트 토큰 낭비도 없습니다.
+- 📦 **새로 만든 파일까지 남김없이 캡처**:
+  - 흔히 쓰는 `git diff`는 추적 중인 수정본만 잡고 새로 만든 파일(Untracked)을 통째로 놓칩니다.
+  - `limit-upcoming`은 `git diff`(수정본)와 `git diff --cached`(스테이징)는 물론, **새로 추가된 파일 내용 전문까지 단일 문서(`HANDOFF_BUNDLE.md`)에 빠짐없이 담아냅니다.**
+  - `.env` 같은 비밀 키 파일이나 바이너리, 대용량 파일은 자동으로 걸러내고 `manifest.json`에 제외 사유를 정직하게 남깁니다.
+- 🚦 **단계별 세이프가드 (Adaptive Gating)**:
+  - `80% 미만 (SAFE)`: 아무런 간섭 없이 조용히 넘어갑니다.
+  - `88% ~ 92% (WARNING)`: 백그라운드에 임시 드래프트 번들(`.handoff/latest-draft/`)을 떠두고, 지금 손대고 있는 파일만 깔끔하게 마무리하도록 유도합니다.
+  - `93% 이상 (CRITICAL)`: 코드가 반쪽짜리로 깨지는 걸 막기 위해 **새 코드 수정을 즉시 멈추고(Freeze)**, 후속 에이전트에 넘길 최종 인계 번들을 만듭니다.
+- 🧪 **테스트 결과 가감 없이 기록**: `pytest`나 `npm test` 같은 검증 명령을 돌려보고 종료 코드, stdout, stderr, 실행 시간을 있는 그대로 번들에 첨부합니다.
 
 ---
 
-## 🚀 30초 시작하기 <a id="quick-start"></a>
+## 🚀 원클릭 시작하기 <a id="quick-start"></a>
 
-### 1. 설치
+### 1. 터미널에 한 줄 붙여넣기 (One-Click Install)
 
-무거운 외부 라이브러리 없이 Python 3 표준 라이브러리만으로 가볍게 돌아갑니다.
+터미널에 아래 명령어 한 줄만 붙여넣으면 끝납니다. CLI 패키지 설치와 함께 **Claude Code 및 AI 에이전트의 슬래시 커맨드(`/limit-upcoming`)**까지 한 번에 등록됩니다:
 
 ```bash
-git clone https://github.com/dukjoon/limit_upcoming.git
-cd limit_upcoming
-pip install -e .
+curl -fsSL https://raw.githubusercontent.com/dukjoon/limit_upcoming/master/install.sh | bash
 ```
 
-### 2. 남은 사용량 확인 (0-Token Probe)
+*(이미 저장소를 클론하셨다면 저장소 폴더에서 `./install.sh`를 실행하셔도 됩니다.)*
 
-LLM 토큰을 쓰지 않고 0.05초 만에 쿼터 상태를 읽어옵니다:
+---
 
+### 2. 바로 사용하기
+
+#### 💬 AI 에이전트(Claude Code 등) 대화창에서 바로 쓰기
+에이전트 CLI 실행 중 언제든지 슬래시 명령어를 입력하세요:
+```text
+/limit-upcoming
+```
+특정 작업 목표를 번들에 함께 남기고 싶다면:
+```text
+/limit-upcoming "JWT 인증 미들웨어 리팩터링 작업 상태 저장"
+```
+
+#### 💻 내 터미널(CLI)에서 직접 쓰기
 ```bash
-# 한 줄 요약 (에이전트 컨텍스트를 아낄 때 좋습니다)
+# 0-Token으로 현재 남은 쿼터 즉시 확인 (< 0.05초)
 limit-upcoming probe --compact
-# 출력 예시: [codex] Used: 95.0% | Tier: CRITICAL_HANDOFF | Action: FREEZE_EDITS_AND_BUNDLE
 
-# 상세 JSON 출력
-limit-upcoming probe --json
-```
-
-### 3. 현재 작업 상태 즉시 번들링 (Bundle)
-
-지금 작업 중인 워킹 트리와 새로 만든 파일, 테스트 실패 결과를 한 번에 마크다운 번들로 묶습니다:
-
-```bash
+# 현재 워킹 트리(새로 만든 파일 포함)와 테스트 결과를 한 번에 묶기
 limit-upcoming bundle \
   --goal "JWT 인증 미들웨어 구현" \
   --notes "auth.py 수정 끝남. routes/login.py 작성 중인데 test_login에서 터짐" \
   --verify-cmd "pytest tests/test_auth.py"
-```
 
-### 4. 위험한 대규모 수정 전 가드 걸기 (Guard)
-
-훅 스크립트나 체크포인트에 걸어두고 쓰는 명령어입니다:
-
-```bash
+# 대규모 수정 전 임계치(88%/93%) 자동 가드 걸기
 limit-upcoming guard \
   --goal "DB 마이그레이션 및 대규모 리팩터링" \
   --warning-threshold 88.0 \
@@ -125,11 +122,12 @@ flowchart LR
     end
 ```
 
-### 왜 에이전트에게 `/usage`를 치게 하면 안 될까요?
-| 구분 | 토큰 소모 | 문제점 |
-| :--- | :--- | :--- |
-| **LLM에게 `/usage` 시키기** | 턴당 500 ~ 2,000 토큰 | 사용량 보려다가 쿼터를 다 써버려서 정작 코드 고치다 429로 뻗음 |
-| **`limit-upcoming`** | **0 토큰 (순수 로컬 파일 리딩)** | LLM 상태와 무관하게 5시간 윈도우와 주간 쿼터 둘 다 선제 감지 |
+### 에이전트가 `/usage`를 사용하면 안되는 이유
+
+| 구분                        | 토큰 소모                        | 문제점                                                         |
+| :-------------------------- | :------------------------------- | :------------------------------------------------------------- |
+| **LLM에게 `/usage` 시키기** | 턴당 500 ~ 2,000 토큰            | 사용량 보려다가 쿼터를 다 써버려서 정작 코드 고치다 429로 뻗음 |
+| **`limit-upcoming`**        | **0 토큰 (순수 로컬 파일 리딩)** | LLM 상태와 무관하게 5시간 윈도우와 주간 쿼터 둘 다 선제 감지   |
 
 > [!NOTE]
 > Codex CLI는 모델 응답이 올 때마다 로컬 JSONL 파일에 실시간 쿼터(`primary` 5시간 사용률, `secondary` 7일 사용률)를 기록합니다. `limit-upcoming`은 파일 전체를 무식하게 읽지 않고, 파일 끝 256KB만 역방향으로 훑어 필요한 숫자만 꺼내옵니다.
@@ -164,7 +162,7 @@ stateDiagram-v2
 
 ---
 
-## 📦 번들 폴더엔 뭐가 들어가나 <a id="whats-inside"></a>
+## 📦 Bundle Folder <a id="whats-inside"></a>
 
 명령어를 실행하면 `.handoff/bundle-<날짜_시간>/` 폴더 아래 깔끔하게 정리되어 들어갑니다:
 
@@ -183,33 +181,44 @@ stateDiagram-v2
 
 ````markdown
 # Handoff Evidence Bundle
+
 - **생성 시각**: `2026-11-03T06:04:44Z` | **브랜치**: `main`
 - **사용량 상태**: `codex` | 실질 사용률: `95.0%` | 등급: `CRITICAL_HANDOFF`
 
 ## 1. 작업 목표 & 현재 상황
+
 **목표**: 사용자 인증 플로우 구현
 **진행 상황**: auth 서비스는 완성했고, login 라우트 테스트 42번째 줄에서 assertion 실패 나는 중.
 
 ## 2. 작업 트리 변경 내역
+
 ### 수정된 내용 (`git diff`)
+
 ```diff
 ...
 ```
+
 ### 새로 만든 파일 전문
+
 #### 파일: `src/auth_helpers.py`
+
 ```python
 def hash_password(pwd: str) -> str:
     ...
 ```
 
 ## 3. 검증 명령어 실행 결과
+
 ### 실행 명령: `pytest tests/test_auth.py`
+
 - **결과**: `FAIL (exit 1)` | **소요 시간**: `450 ms`
+
 ```text
 FAILED tests/test_auth.py::test_jwt_expiration - AssertionError: Token not expired
 ```
 
 ## 4. 다음 에이전트를 위한 인계 지침
+
 1. `tests/test_auth.py`의 만료 시간 검증 로직부터 수정하세요.
 2. 새로 추가된 `src/auth_helpers.py`를 `routes/auth.py`에 import해서 이어가세요.
 ````
@@ -236,7 +245,7 @@ usage: limit-upcoming [-h] {probe,bundle,guard,hook-statusline} ...
 
 ---
 
-## ⚖️ 솔직한 기술 명세: 되는 것과 안 되는 것 <a id="honest-boundaries"></a>
+## ⚖️ 기술 명세 <a id="honest-boundaries"></a>
 
 화려한 마케팅 문구나 "알아서 100% 자율 복구한다"는 식의 과장은 하지 않습니다. 이 도구가 정확히 어디까지 보장하는지 투명하게 밝힙니다.
 
@@ -244,16 +253,18 @@ usage: limit-upcoming [-h] {probe,bundle,guard,hook-statusline} ...
 > **핵심 명세 규약**
 > `limit-upcoming`은 현재 워킹 트리 상태와 사용자가 지정한 검증 명령 결과를 파일로 모아주는 **로컬 번들링 도구**입니다. LLM의 내부 메모리나 세션 상태 자체를 이식해 주지 않으며, 번들을 전달받은 다음 에이전트가 무조건 성공한다는 보장도 하지 않습니다. `0-Token`이라는 표현은 **번들을 만들고 로컬 쿼터를 읽는 과정에서 LLM을 호출하지 않는다**는 뜻이며, 다음 에이전트가 이 번들을 읽고 작업을 이어갈 때는 당연히 모델 토큰이 소모됩니다.
 
-### 보장하는 점
-* ✅ **완전한 로컬 동작**: 번들을 만들거나 사용량을 잴 때 외부 LLM API를 단 한 번도 부르지 않습니다.
-* ✅ **새 파일 누락 방지**: 일반 `git diff`에서 증발하는 신규 텍스트 파일 내용을 온전히 담아냅니다.
-* ✅ **비밀 키 보호**: `.env*`, `*.pem`, `*.key` 같은 민감한 파일은 번들 본문에서 빼고 `excluded_files` 목록에 제외 사유를 명시합니다.
-* ✅ **컨텍스트 폭증 방지**: 거대한 세션 로그를 통째로 읽지 않고 끝부분 256KB 버퍼만 스캔합니다.
+### Guarantee
 
-### 보장하지 않는 점
-* ❌ 다음 에이전트가 사람의 개입 없이 코딩을 100% 끝마친다고 약속하지 않습니다.
-* ❌ 각 AI CLI마다 제각각인 세션 히스토리를 하나의 완벽한 공통 규격으로 역파싱하지 않습니다. (작업 목표 `--goal`을 핵심 기준으로 삼습니다).
-* ❌ 검증 명령(`--verify-cmd`)은 로컬 환경과 네트워크 상태에 따라 결과가 달라질 수 있습니다. 본 도구는 그 결과를 가감 없이 기록하는 역할만 합니다.
+- ✅ **완전한 로컬 동작**: 번들을 만들거나 사용량을 잴 때 외부 LLM API를 단 한 번도 부르지 않습니다.
+- ✅ **새 파일 누락 방지**: 일반 `git diff`에서 증발하는 신규 텍스트 파일 내용을 온전히 담아냅니다.
+- ✅ **비밀 키 보호**: `.env*`, `*.pem`, `*.key` 같은 민감한 파일은 번들 본문에서 빼고 `excluded_files` 목록에 제외 사유를 명시합니다.
+- ✅ **컨텍스트 폭증 방지**: 거대한 세션 로그를 통째로 읽지 않고 끝부분 256KB 버퍼만 스캔합니다.
+
+### Honestly
+
+- ❌ 다음 에이전트가 사람의 개입 없이 코딩을 100% 끝마친다고 약속하지 않습니다.
+- ❌ 각 AI CLI마다 제각각인 세션 히스토리를 하나의 완벽한 공통 규격으로 역파싱하지 않습니다. (작업 목표 `--goal`을 핵심 기준으로 삼습니다).
+- ❌ 검증 명령(`--verify-cmd`)은 로컬 환경과 네트워크 상태에 따라 결과가 달라질 수 있습니다. 본 도구는 그 결과를 가감 없이 기록하는 역할만 합니다.
 
 ---
 

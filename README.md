@@ -58,47 +58,44 @@ When an AI coding agent hits an API quota exhaustion (`HTTP 429` or subscription
 
 ---
 
-## 🚀 Quick Start <a id="quick-start"></a>
+## 🚀 One-Click Quick Start <a id="quick-start"></a>
 
-### 1. Installation
+### 1. One-Liner Install (Paste into Terminal)
 
-Zero external dependencies! Operates 100% on the Python 3 standard library.
+Run this single command in your terminal. It installs the CLI and automatically registers the **`/limit-upcoming` slash command** inside Claude Code and other supported AI agents:
 
 ```bash
-git clone https://github.com/dukjoon/limit_upcoming.git
-cd limit_upcoming
-pip install -e .
+curl -fsSL https://raw.githubusercontent.com/dukjoon/limit_upcoming/master/install.sh | bash
 ```
 
-### 2. Check Local Quota (0-Token Probe)
+*(If you have already cloned this repository, simply run `./install.sh`)*
 
-Query current quota utilization instantly (< 50ms) without invoking the LLM:
+---
 
+### 2. Immediate Usage
+
+#### 💬 Directly Inside Your AI Agent (Claude Code, etc.)
+Type the slash command anywhere in your agent conversation:
+```text
+/limit-upcoming
+```
+Or provide a specific goal:
+```text
+/limit-upcoming "Refactor JWT auth middleware and checkpoint tests"
+```
+
+#### 💻 Directly in Your Terminal (CLI)
 ```bash
-# Compact single-line output (ideal for minimal agent context injection)
+# Check 0-token remaining quota instantly (< 0.05s)
 limit-upcoming probe --compact
-# [codex] Used: 95.0% | Tier: CRITICAL_HANDOFF | Action: FREEZE_EDITS_AND_BUNDLE
 
-# Full JSON output
-limit-upcoming probe --json
-```
-
-### 3. Generate a Local Evidence Bundle
-
-Immediately snapshot the working tree, untracked files, and test results:
-
-```bash
+# Immediately bundle working tree (diffs + untracked files) and test outputs
 limit-upcoming bundle \
   --goal "Implement JWT authentication middleware" \
   --notes "auth.py updated, routes/login.py partially done, test_login failing" \
   --verify-cmd "pytest tests/test_auth.py"
-```
 
-### 4. Guard Before Hazardous Multi-File Edits
-
-Run in your hooks or pre-task checkpoints:
-
-```bash
+# Guard before hazardous multi-file edits (triggers at 88% / 93%)
 limit-upcoming guard \
   --goal "Large architectural refactoring" \
   --warning-threshold 88.0 \
